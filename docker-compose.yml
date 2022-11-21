@@ -12,6 +12,72 @@ services:
       - MC_DEFAULT_CLUSTER_MEMBERS=hazelcast:5701
       - MC_ALLOW_MULTIPLE_LOGIN=true
       - MC_ADMIN_USER=admin
-      - MC_ADMIN_PASSWORD=hazelcast12
+      - MC_ADMIN_PASSWORD=adminuser
     ports:
       - 8080:8080
+
+  influxdb:
+    image: influxdb:2.5.1
+    ports:
+      - '8086:8086'
+    volumes:
+      - influxdb-storage:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=adminuser
+      - DOCKER_INFLUXDB_INIT_ORG=dev
+      - DOCKER_INFLUXDB_INIT_BUCKET=db0
+      - DOCKER_INFLUXDB_INIT_TOKEN=admin-secret-token
+
+  kapacitor:
+    image: kapacitor:1.6.5
+    ports:
+      - '9092:9092'
+    volumes:
+      - kapacitor-storage:/var/lib/kapacitor
+      - kapacitor-config:/etc/kapacitor
+    environment:
+      - KAPACITOR_INFLUXDB_NAME=influxdb
+      - KAPACITOR_INFLUXDB_0_URLS_0=http://influxdb:8086
+      - KAPACITOR_INFLUXDB_0_USERNAME=admin
+      - KAPACITOR_INFLUXDB_0_PASSWORD=adminuser
+
+# TODO: Telegraf needed
+#  chronograf:
+#    image: chronograf:1.10.0
+#    ports:
+#      - '127.0.0.1:8888:8888'
+#    volumes:
+#      - chronograf-storage:/var/lib/chronograf
+#    depends_on:
+#      - influxdb
+#    environment:
+#      - INFLUXDB_URL=http://influxdb:8086
+#      - INFLUXDB_USERNAME=admin
+#      - INFLUXDB_PASSWORD=adminuser
+#      - INFLUXDB_ORG=dev
+#      - INFLUXDB_TOKEN=admin-secret-token
+#      - KAPACITOR_URL=http://kapacitor:9092
+#
+#  grafana:
+#    image: grafana/grafana:latest
+#    ports:
+#      - '3000:3000'
+#    volumes:
+#      - grafana-storage:/var/lib/grafana
+#      - ./grafana-provisioning/:/etc/grafana/provisioning
+#    depends_on:
+#      - influxdb
+#    environment:
+#      - GF_SECURITY_ADMIN_USER=admin
+#      - GF_SECURITY_ADMIN_PASSWORD=adminuser
+
+volumes:
+  influxdb-storage:
+  influxdb-config:
+  kapacitor-storage:
+  kapacitor-config:
+#  chronograf-storage:
+#  grafana-storage:

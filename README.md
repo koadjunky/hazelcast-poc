@@ -1,10 +1,16 @@
 # hazelcast-poc
 
-## Hazelcast
+## Docker Compose
 
-Start hazelcast cluster:
+Start docker compose:
 
 ```docker compose up```
+
+Shut docker compose:
+
+```docker compose down```
+
+## Hazelcast
 
 Scale hazelcast cluster (management cluster works up to 2 nodes without license):
 
@@ -12,8 +18,10 @@ Scale hazelcast cluster (management cluster works up to 2 nodes without license)
 
 Access management center:
 
-```http://localhost:8080/clusters/dev``` (admin/hazelcast12)
+```http://localhost:8080/clusters/dev``` (admin/adminuser)
 
-Shut down the cluster
+## InfluxDB
 
-```docker compose down```
+InfluxDB console is available at:
+
+```http://localhost:8086/``` (admin/adminuser)
