@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package eu.malycha.hazelcast.poc;
+
+message Trade {
+  map<string, string> headers = 1;
+  string trade_id = 2;
+  string order_id = 3;
+
+  string sender = 10;
+  string counterpart = 11;
+  string ticker = 12;
+
+  string quantity = 20;
+  string base_currency = 21;
+  string quote_currency = 22;
+  string price = 23;
+}
