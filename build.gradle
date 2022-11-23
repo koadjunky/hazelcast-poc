@@ -12,6 +12,9 @@ repositories {
 }
 
 dependencies {
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter:2.7.5'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor:2.7.5'
     // Protobuf
     implementation 'com.google.protobuf:protoc:3.21.9'
     implementation 'com.google.protobuf:protobuf-java:3.21.9'
@@ -24,6 +27,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
     // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.5'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
     testImplementation 'org.mockito:mockito-core:4.8.0'
