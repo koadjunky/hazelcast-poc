@@ -4,6 +4,7 @@ import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientConnectionStrategyConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
+import com.hazelcast.client.config.ConnectionRetryConfig;
 import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.protobuf.ProtobufSerializer;
@@ -16,8 +17,9 @@ public class HazelcastConfiguration {
     private ClientConfig clientConfig() {
         ClientConfig clientConfig = new ClientConfig();
 
-        ClientConnectionStrategyConfig connectionStrategyConfig = clientConfig.getConnectionStrategyConfig();
-        connectionStrategyConfig.getConnectionRetryConfig().setMaxBackoffMillis(500);
+        ConnectionRetryConfig connectionRetryConfig = clientConfig.getConnectionStrategyConfig().getConnectionRetryConfig();
+        connectionRetryConfig.setMaxBackoffMillis(500);
+        connectionRetryConfig.setClusterConnectTimeoutMillis(5000);
 
         ClientNetworkConfig clientNetworkConfig = clientConfig.getNetworkConfig();
         clientNetworkConfig.addAddress("localhost");

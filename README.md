@@ -18,7 +18,7 @@ Scale hazelcast cluster (management cluster works up to 2 nodes without license)
 
 Access management center:
 
-```http://localhost:8080/clusters/dev``` (admin/adminuser)
+```http://localhost:8080/clusters/dev``` (admin/ChangeM3)
 
 ## InfluxDB
 
