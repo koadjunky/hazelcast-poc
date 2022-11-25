@@ -2,12 +2,13 @@ package eu.malycha.hazelcast.poc;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
-import com.hazelcast.client.config.ClientConnectionStrategyConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
+import com.hazelcast.client.config.ClientUserCodeDeploymentConfig;
 import com.hazelcast.client.config.ConnectionRetryConfig;
 import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.protobuf.ProtobufSerializer;
+import com.hazelcast.sql.SqlResult;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,12 +33,43 @@ public class HazelcastConfiguration {
         serializerConfig.setImplementation(new TradeSerializer());
         clientConfig.getSerializationConfig().addSerializerConfig(serializerConfig);
 
+        ClientUserCodeDeploymentConfig deploymentConfig = clientConfig.getUserCodeDeploymentConfig();
+        deploymentConfig.addClass(TradeOrBuilder.class);
+        deploymentConfig.addClass(Trade.class);
+        deploymentConfig.addClass(Trade.Builder.class);
+        deploymentConfig.addClass(TradeSerializer.class);
+        deploymentConfig.setEnabled(true);
+
         return clientConfig;
+    }
+
+    private void dropMapping(HazelcastInstance hz) {
+        String query = "DROP MAPPING IF EXISTS trade";
+        SqlResult result = hz.getSql().execute(query);
+        result.close();
+    }
+
+    private void configureMapping(HazelcastInstance hz) {
+        // TODO: Replace with code block after upgrade to java-17
+        String query =
+            "CREATE MAPPING trade " +
+            "TYPE IMap " +
+            "OPTIONS ( " +
+            "    'keyFormat' = 'java', " +
+            "    'keyJavaClass' = 'java.lang.String', " +
+            "    'valueFormat' = 'java', " +
+            "    'valueJavaClass' = 'eu.malycha.hazelcast.poc.Trade' " +
+            ")";
+        dropMapping(hz);
+        SqlResult result = hz.getSql().execute(query);
+        result.close();
     }
 
     @Bean
     public HazelcastInstance hazelcast() {
-        return HazelcastClient.newHazelcastClient(clientConfig());
+        HazelcastInstance hz = HazelcastClient.newHazelcastClient(clientConfig());
+        configureMapping(hz);
+        return hz;
     }
 }
 

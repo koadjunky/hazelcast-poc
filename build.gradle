@@ -37,6 +37,11 @@ dependencies {
     testImplementation 'org.awaitility:awaitility:4.2.0'
 }
 
+java {
+    sourceCompatibility="11"
+    targetCompatibility="11"
+}
+
 protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:3.21.9"
