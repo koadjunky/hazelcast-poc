@@ -1,4 +1,4 @@
-package eu.malycha.hazelcast.poc.sql;
+package eu.malycha.hazelcast.poc.client.sql;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.sql.SqlResult;
@@ -21,9 +21,21 @@ public class SqlController {
         this.hz = hazelcast;
     }
 
-    @GetMapping("/sender/{name}")
-    public int senderCount(String name) {
-        try (SqlResult result = hz.getSql().execute("SELECT * FROM trade")) {
+    @GetMapping("/pojo/sender/{name}")
+    public int pojoSenderCount(String name) {
+        try (SqlResult result = hz.getSql().execute("SELECT * FROM trade_pojo WHERE sender = '%s'".formatted(name))) {
+            int count = 0;
+            for (SqlRow row : result) {
+                count++;
+            }
+            LOGGER.info("Returned {} rows", count);
+            return count;
+        }
+    }
+
+    @GetMapping("/protobuf/sender/{name}")
+    public int protobufSenderCount(String name) {
+        try (SqlResult result = hz.getSql().execute("SELECT * FROM trade WHERE sender = '%s'".formatted(name))) {
             int count = 0;
             for (SqlRow row : result) {
                 count++;

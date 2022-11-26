@@ -2,10 +2,10 @@ syntax = "proto3";
 
 option java_multiple_files = true;
 
-package eu.malycha.hazelcast.poc;
+package eu.malycha.hazelcast.poc.domain;
 
 message Trade {
-  map<string, string> headers = 1;
+  //map<string, string> headers = 1;
   string trade_id = 2;
   string order_id = 3;
 

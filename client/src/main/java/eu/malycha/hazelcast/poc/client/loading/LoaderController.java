@@ -1,4 +1,4 @@
-package eu.malycha.hazelcast.poc.loading;
+package eu.malycha.hazelcast.poc.client.loading;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +20,15 @@ public class LoaderController {
         this.service = service;
     }
 
-    @PostMapping("/{number}")
+    @PostMapping("/pojo/{number}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void load(int number) {
-        service.load(number);
+    public void load_pojo(int number) {
+        service.load_pojo(number);
+    }
+
+    @PostMapping("/protobuf/{number}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void load_protobuf(int number) {
+        service.load_protobuf(number);
     }
 }

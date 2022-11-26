@@ -1,1 +1,9 @@
 rootProject.name = 'hazelcast-poc'
+
+include 'domain'
+include 'server'
+include 'client'
+
+project(':domain').name = 'hazelcast-poc-domain'
+project(':server').name = 'hazelcast-poc-server'
+project(':client').name = 'hazelcast-poc-client'

@@ -1,0 +1,17 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.5'
+    id 'com.palantir.docker' version '0.34.0'
+}
+
+group 'eu.malycha'
+version '0.0.1-SNAPSHOT'
+
+dependencies {
+    implementation project(':hazelcast-poc-domain')
+}
+
+docker {
+    name "koadjunky/hazelcast-poc-server:latest"
+    dockerfile file('Dockerfile')
+    files tasks.bootJar.outputs
+}

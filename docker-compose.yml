@@ -1,11 +1,9 @@
 version: "3.9"
 services:
   hazelcast:
-    image: hazelcast/hazelcast:5.2.0
-    environment:
-      - HZ_USERCODEDEPLOYMENT_ENABLED=true
+    image: koadjunky/hazelcast-poc-server:latest
     ports:
-      - '5701-5710:5701'
+      - '5701-5703:5701'
 
   management-center:
     image: hazelcast/management-center:5.2.0
