@@ -17,6 +17,8 @@ public class LoaderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoaderService.class);
 
+    private static final int QTY_LIMIT = 5000;
+
     private static final List<String> ACCOUNTS = List.of("Alice", "Bob", "Carol", "David");
 
     private final Random rand = new Random();
@@ -34,6 +36,7 @@ public class LoaderService {
                 .setTradeId(UUID.randomUUID().toString())
                 .setSender(getRandomAccount())
                 .setCounterpart(getRandomAccount())
+                .setQuantity(Integer.toString(rand.nextInt(QTY_LIMIT)))
                 .build();
             data.put(record.getTradeId(), record);
         }
@@ -49,6 +52,7 @@ public class LoaderService {
                 .setTradeId(UUID.randomUUID().toString())
                 .setSender(getRandomAccount())
                 .setCounterpart(getRandomAccount())
+                .setQuantity(Integer.toString(rand.nextInt(QTY_LIMIT)))
                 .build();
             data.put(record.getTradeId(), record);
         }
