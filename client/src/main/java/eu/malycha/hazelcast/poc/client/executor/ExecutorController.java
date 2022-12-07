@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 // TODO: Pipelines
-// TODO: Indexes
 // TODO: Compare SQL and executor service performance
-// TODO: Cancelling tasks
 // TODO: Split brain protection
 // TODO: Durable executor
 
@@ -40,7 +41,7 @@ public class ExecutorController {
         Map<Member, Future<Integer>> results = executor.submitToAllMembers(new SumTaskPojo(name));
         int result = 0;
         for (Map.Entry<Member, Future<Integer>> entry : results.entrySet()) {
-            Integer value = entry.getValue().get();
+            Integer value = get(entry.getValue()).orElse(0);
             LOGGER.info("Result from member {}: {}", entry.getKey().getAddress(), value);
             result += value;
         }
@@ -53,10 +54,20 @@ public class ExecutorController {
         Map<Member, Future<Integer>> results = executor.submitToAllMembers(new SumTask(name));
         int result = 0;
         for (Map.Entry<Member, Future<Integer>> entry : results.entrySet()) {
-            Integer value = entry.getValue().get();
+            Integer value = get(entry.getValue()).orElse(0);
             LOGGER.info("Result from member {}: {}", entry.getKey().getAddress(), value);
             result += value;
         }
         LOGGER.info("Total: {}", result);
+    }
+
+    private <T> Optional<T> get(Future<T> future) throws ExecutionException, InterruptedException {
+        try {
+            return Optional.of(future.get(100, TimeUnit.MILLISECONDS));
+        } catch (TimeoutException ex) {
+            LOGGER.warn("Timeout!");
+            future.cancel(true);
+            return Optional.empty();
+        }
     }
 }
