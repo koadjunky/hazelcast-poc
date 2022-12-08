@@ -40,6 +40,11 @@ public class HazelcastConfiguration {
         serializerConfig.setImplementation(new TradeSerializer());
         config.getSerializationConfig().addSerializerConfig(serializerConfig);
 
+        config.getDurableExecutorConfig("default")
+            .setPoolSize(4)
+            .setDurability(1)
+            .setCapacity(8);
+
         return config;
     }
 

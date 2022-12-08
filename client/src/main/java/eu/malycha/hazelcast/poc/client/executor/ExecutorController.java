@@ -21,7 +21,6 @@ import java.util.concurrent.TimeoutException;
 // TODO: Pipelines
 // TODO: Compare SQL and executor service performance
 // TODO: Split brain protection
-// TODO: Durable executor
 
 @RestController
 @RequestMapping("/api/execute/sum/quantity")
@@ -63,7 +62,7 @@ public class ExecutorController {
 
     private <T> Optional<T> get(Future<T> future) throws ExecutionException, InterruptedException {
         try {
-            return Optional.of(future.get(100, TimeUnit.MILLISECONDS));
+            return Optional.of(future.get(10000, TimeUnit.MILLISECONDS));
         } catch (TimeoutException ex) {
             LOGGER.warn("Timeout!");
             future.cancel(true);
