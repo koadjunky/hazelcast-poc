@@ -20,7 +20,6 @@ import java.util.concurrent.TimeoutException;
 
 // TODO: Pipelines
 // TODO: Compare SQL and executor service performance
-// TODO: Split brain protection
 
 @RestController
 @RequestMapping("/api/execute/sum/quantity")
