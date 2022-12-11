@@ -35,6 +35,8 @@ public class HazelcastConfiguration {
         SplitBrainProtectionConfig splitBrainProtectionConfig = SplitBrainProtectionConfig.newRecentlyActiveSplitBrainProtectionConfigBuilder(SPB_NAME, SPB_MIN_NODES, SPB_TOLERANCE)
             .build();
         splitBrainProtectionConfig.setProtectOn(SplitBrainProtectionOn.READ_WRITE);
+        splitBrainProtectionConfig.setEnabled(true);
+        config.addSplitBrainProtectionConfig(splitBrainProtectionConfig);
 
         MapConfig tradeMapConfig = config.getMapConfig("trade");
         tradeMapConfig.addIndexConfig(new IndexConfig(IndexType.HASH, "sender"));

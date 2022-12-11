@@ -14,7 +14,15 @@ Shut docker compose:
 
 Scale hazelcast cluster (management cluster works up to 2 nodes without license):
 
-```docker compose up --scale hazelcast=5```
+```docker compose up --scale hazelcast1=5```
+
+Shut down hazelcast worker:
+
+```docker compose stop hazelcast3```
+
+Start hazelcast worker:
+
+```docker compose start hazelcast3```
 
 Access management center:
 
