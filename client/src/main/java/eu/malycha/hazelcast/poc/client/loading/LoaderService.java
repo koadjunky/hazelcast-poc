@@ -33,7 +33,7 @@ public class LoaderService {
         IMap<String, TradePojo> data = hz.getMap("trade_pojo");
         for (int i = 0; i < number; i++) {
             TradePojo record = TradePojo.newBuilder()
-                .setTradeId(UUID.randomUUID().toString())
+                .setTradeId("%010d".formatted(i))
                 .setSender(getRandomAccount())
                 .setCounterpart(getRandomAccount())
                 .setQuantity(Integer.toString(rand.nextInt(QTY_LIMIT)))
@@ -49,7 +49,7 @@ public class LoaderService {
         IMap<String, Trade> data = hz.getMap("trade");
         for (int i = 0; i < number; i++) {
             Trade record = Trade.newBuilder()
-                .setTradeId(UUID.randomUUID().toString())
+                .setTradeId("%010d".formatted(i))
                 .setSender(getRandomAccount())
                 .setCounterpart(getRandomAccount())
                 .setQuantity(Integer.toString(rand.nextInt(QTY_LIMIT)))
