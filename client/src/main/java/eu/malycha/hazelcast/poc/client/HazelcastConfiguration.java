@@ -50,14 +50,12 @@ public class HazelcastConfiguration {
             .setMaxSizePolicy(MaxSizePolicy.ENTRY_COUNT)
             .setSize(100000);
 
-        NearCacheConfig nearCacheConfig = new NearCacheConfig()
+        return new NearCacheConfig()
             .setName(name)
             .setInMemoryFormat(InMemoryFormat.OBJECT)
             .setInvalidateOnChange(false)
             .setTimeToLiveSeconds(600)
             .setEvictionConfig(evictionConfig);
-
-        return nearCacheConfig;
     }
 
     @Bean
