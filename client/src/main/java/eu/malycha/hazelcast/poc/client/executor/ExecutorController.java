@@ -35,6 +35,7 @@ public class ExecutorController {
 
     @GetMapping("/pojo/sender/{name}")
     public void pojoSenderSum(String name) throws ExecutionException, InterruptedException {
+        long start = System.currentTimeMillis();
         IExecutorService executor = hz.getExecutorService("default");
         Map<Member, Future<Integer>> results = executor.submitToAllMembers(new SumTaskPojo(name));
         int result = 0;
@@ -43,11 +44,14 @@ public class ExecutorController {
             LOGGER.info("Result from member {}: {}", entry.getKey().getAddress(), value);
             result += value;
         }
+        long stop = System.currentTimeMillis();
         LOGGER.info("Total: {}", result);
+        LOGGER.info("Calculation executed in {} ms", stop - start);
     }
 
     @GetMapping("/protobuf/sender/{name}")
     public void protobufSenderSum(String name) throws ExecutionException, InterruptedException {
+        long start = System.currentTimeMillis();
         IExecutorService executor = hz.getExecutorService("default");
         Map<Member, Future<Integer>> results = executor.submitToAllMembers(new SumTask(name));
         int result = 0;
@@ -56,7 +60,9 @@ public class ExecutorController {
             LOGGER.info("Result from member {}: {}", entry.getKey().getAddress(), value);
             result += value;
         }
+        long stop = System.currentTimeMillis();
         LOGGER.info("Total: {}", result);
+        LOGGER.info("Calculation executed in {} ms", stop - start);
     }
 
     private <T> Optional<T> get(Future<T> future) throws ExecutionException, InterruptedException {

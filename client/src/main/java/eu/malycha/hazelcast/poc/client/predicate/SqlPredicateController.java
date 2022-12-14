@@ -1,8 +1,10 @@
 package eu.malycha.hazelcast.poc.client.predicate;
 
 import java.util.Collection;
+import java.util.Map;
 
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.IMap;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.PredicateBuilder;
 import com.hazelcast.query.Predicates;
@@ -29,15 +31,17 @@ public class SqlPredicateController {
 
     @GetMapping("/pojo/sender/{name}")
     public void pojoSenderCount(String name) {
-        SqlPredicate predicate = new SqlPredicate("sender = '%s'".formatted(name));
-        Collection<TradePojo> trades = hz.getMap("trade_pojo").values(predicate);
+        Predicate<String, TradePojo> predicate = Predicates.sql("sender = '%s'".formatted(name));
+        IMap<String, TradePojo> map = hz.getMap("trade_pojo");
+        Collection<TradePojo> trades = map.values(predicate);
         LOGGER.info("Returned {} rows", trades.size());
     }
 
     @GetMapping("/protobuf/sender/{name}")
     public void protobufSenderCount(String name) {
-        SqlPredicate predicate = new SqlPredicate("sender = '%s'".formatted(name));
-        Collection<Trade> trades = hz.getMap("trade").values(predicate);
+        Predicate<String, Trade> predicate = Predicates.sql("sender = '%s'".formatted(name));
+        IMap<String, Trade> map = hz.getMap("trade");
+        Collection<Trade> trades = map.values(predicate);
         LOGGER.info("Returned {} rows", trades.size());
     }
 }
