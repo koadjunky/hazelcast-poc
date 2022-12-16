@@ -21,7 +21,7 @@ public class LoaderService {
 
     private static final List<String> ACCOUNTS = List.of("Alice", "Bob", "Carol", "David");
 
-    private final Random rand = new Random();
+    private static final Random rand = new Random();
     private final HazelcastInstance hz;
 
     LoaderService(HazelcastInstance hazelcast) {
@@ -36,7 +36,7 @@ public class LoaderService {
                 .setTradeId("%010d".formatted(i))
                 .setSender(getRandomAccount())
                 .setCounterpart(getRandomAccount())
-                .setQuantity(Integer.toString(rand.nextInt(QTY_LIMIT)))
+                .setQuantity(getRandomQuantity())
                 .build();
             data.put(record.getTradeId(), record);
         }
@@ -52,7 +52,7 @@ public class LoaderService {
                 .setTradeId("%010d".formatted(i))
                 .setSender(getRandomAccount())
                 .setCounterpart(getRandomAccount())
-                .setQuantity(Integer.toString(rand.nextInt(QTY_LIMIT)))
+                .setQuantity(getRandomQuantity())
                 .build();
             data.put(record.getTradeId(), record);
         }
@@ -60,7 +60,11 @@ public class LoaderService {
         LOGGER.info("Loaded {} records in {} ms", number, stop - start);
     }
 
-    private String getRandomAccount() {
+    public static String getRandomAccount() {
         return ACCOUNTS.get(rand.nextInt(ACCOUNTS.size()));
+    }
+
+    public static String getRandomQuantity() {
+        return Integer.toString(rand.nextInt(QTY_LIMIT));
     }
 }
