@@ -33,3 +33,23 @@ Access management center:
 InfluxDB console is available at:
 
 ```http://localhost:8086/``` (admin/adminuser)
+
+# Performance notes
+
+## Transactions
+
+Load 100k of records into both protobuf and pojo maps:
+* without transaction - 28s
+* one phase transaction - 54s (x2)
+* two phase transaction - 86s (x3)
+
+## Task executor
+
+Running query via task executor on three nodes, query selects 1/4 of records and
+calculates sum of one field.
+
+| Operation                | protobuf      | pojo       |
+|--------------------------|---------------|------------|
+| predicate with index     | 170ms         | 333ms      |
+| predicate without index  | 553ms (x3.25) | 561ms (x2) |
+| no predicate (full scan) | 1100ms (x6.5) | 867ms (x3) |
