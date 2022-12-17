@@ -1,10 +1,12 @@
 package eu.malycha.hazelcast.poc.server;
 
 import com.hazelcast.config.Config;
+import com.hazelcast.config.ExternalDataStoreConfig;
 import com.hazelcast.config.IndexConfig;
 import com.hazelcast.config.IndexType;
 import com.hazelcast.config.ManagementCenterConfig;
 import com.hazelcast.config.MapConfig;
+import com.hazelcast.config.MapStoreConfig;
 import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.config.SplitBrainProtectionConfig;
 import com.hazelcast.config.UserCodeDeploymentConfig;
@@ -43,10 +45,15 @@ public class HazelcastConfiguration {
         tradeMapConfig.addIndexConfig(new IndexConfig(IndexType.HASH, "counterpart"));
         tradeMapConfig.setSplitBrainProtectionName(SPB_NAME);
 
+        MapStoreConfig tradePojoMapStoreConfig = new MapStoreConfig();
+        tradePojoMapStoreConfig.setWriteDelaySeconds(1); // Configures Write-Behind
+        tradePojoMapStoreConfig.setClassName("eu.malycha.hazelcast.poc.server.InfluxDBMapStore");
+
         MapConfig tradePojoMapConfig = config.getMapConfig("trade_pojo");
         tradePojoMapConfig.addIndexConfig(new IndexConfig(IndexType.HASH, "sender"));
         tradePojoMapConfig.addIndexConfig(new IndexConfig(IndexType.HASH, "counterpart"));
         tradePojoMapConfig.setSplitBrainProtectionName(SPB_NAME);
+        tradePojoMapConfig.setMapStoreConfig(tradePojoMapStoreConfig);
 
         SerializerConfig serializerConfig = new SerializerConfig();
         serializerConfig.setTypeClass(Trade.class);

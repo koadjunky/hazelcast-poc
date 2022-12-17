@@ -28,6 +28,8 @@ subprojects {
         implementation 'com.hazelcast:hazelcast:5.2.1'
         implementation 'com.hazelcast:hazelcast-sql:5.2.1'
         implementation 'com.hazelcast.jet:hazelcast-jet-protobuf:5.2.1'
+        implementation 'com.influxdb:influxdb-client-java:6.3.0'
+        implementation 'com.hazelcast.jet.contrib:influxdb:0.2'
 
         // Utils
         implementation 'com.google.guava:guava:31.1-jre'
