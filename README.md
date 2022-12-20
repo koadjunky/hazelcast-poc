@@ -10,6 +10,10 @@ Shut docker compose:
 
 ```docker compose down```
 
+Shut docker compose and remove volumes:
+
+```docker compose down -v```
+
 ## Hazelcast
 
 Scale hazelcast cluster (management cluster works up to 2 nodes without license):
@@ -33,6 +37,10 @@ Access management center:
 InfluxDB console is available at:
 
 ```http://localhost:8086/``` (admin/adminuser)
+
+Obtain token from running container:
+
+```docker exec hazelcast-poc-influxdb-1 influx auth list | awk '/admin/ {print $4 " "}'```
 
 # Performance notes
 

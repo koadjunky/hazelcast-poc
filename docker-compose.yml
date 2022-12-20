@@ -39,7 +39,7 @@ services:
       - DOCKER_INFLUXDB_INIT_PASSWORD=adminuser
       - DOCKER_INFLUXDB_INIT_ORG=dev
       - DOCKER_INFLUXDB_INIT_BUCKET=db0
-      - DOCKER_INFLUXDB_INIT_TOKEN=admin-secret-token
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=admin-secret-token
 
   kapacitor:
     image: kapacitor:1.6.5
