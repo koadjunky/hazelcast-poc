@@ -83,12 +83,12 @@ public class InfluxDBMapStore implements MapStore<String, TradePojo>, MapLoaderL
     // TODO: Prepared statement
     @Override
     public TradePojo load(String key) {
-        Query query = new Query("SELECT * FROM trade_pojo WHERE tradeId='%s'".formatted(key));
-        List<TradeDto> trades = influxDBMapper.query(query, TradeDto.class);
-        return trades.stream()
-            .findFirst()
-            .map(TradeDto::toTradePojo)
-            .orElse(null);
+        String flux = "from(bucket: \"db0\") |> range(start:0) |> filter(fn: (t) => t.tradeId == \"%s\"".formatted(key);
+
+        QueryApi queryApi = influxDB.getQueryApi();
+
+        List<TradePojo> trades = queryApi.query(flux, TradePojo.class);
+        return trades.stream().findFirst().orElse(null);
     }
 
     @Override
