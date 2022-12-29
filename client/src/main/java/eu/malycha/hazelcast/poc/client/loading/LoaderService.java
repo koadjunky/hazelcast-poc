@@ -37,8 +37,10 @@ public class LoaderService {
                 .setSender(getRandomAccount())
                 .setCounterpart(getRandomAccount())
                 .setQuantity(getRandomQuantity())
+                .setPrice("1.0")
                 .build();
             data.put(record.getTradeId(), record);
+            delay(1);
         }
         long stop = System.currentTimeMillis();
         LOGGER.info("Loaded {} records in {} ms", number, stop - start);
@@ -53,6 +55,7 @@ public class LoaderService {
                 .setSender(getRandomAccount())
                 .setCounterpart(getRandomAccount())
                 .setQuantity(getRandomQuantity())
+                .setPrice("1.0")
                 .build();
             data.put(record.getTradeId(), record);
         }
@@ -66,5 +69,13 @@ public class LoaderService {
 
     public static String getRandomQuantity() {
         return Integer.toString(rand.nextInt(QTY_LIMIT));
+    }
+
+    public static void delay(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

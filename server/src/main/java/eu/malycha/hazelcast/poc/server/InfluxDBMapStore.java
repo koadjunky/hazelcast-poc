@@ -83,7 +83,7 @@ public class InfluxDBMapStore implements MapStore<String, TradePojo>, MapLoaderL
     // TODO: Prepared statement
     @Override
     public TradePojo load(String key) {
-        String flux = "from(bucket: \"db0\") |> range(start:0) |> filter(fn: (t) => t.tradeId == \"%s\"".formatted(key);
+        String flux = "from(bucket: \"db0\") |> range(start:0) |> filter(fn: (r) => r.tradeId == \"%s\")".formatted(key);
 
         QueryApi queryApi = influxDB.getQueryApi();
 
@@ -106,11 +106,12 @@ public class InfluxDBMapStore implements MapStore<String, TradePojo>, MapLoaderL
 
         InfluxQLQueryApi queryApi = influxDB.getInfluxQLQueryApi();
 
-        InfluxQLQueryResult result = queryApi.query(query, (columnName, rawValue, resultIndex, seriesName) -> switch (columnName) {
-            default -> rawValue;
-        });
+        InfluxQLQueryResult result = queryApi.query(query);
 
         List<String> iterable = new LinkedList<>();
+        if (result == null) {
+            return iterable;
+        }
         for (InfluxQLQueryResult.Result resultResult : result.getResults()) {
             for (InfluxQLQueryResult.Series series : resultResult.getSeries()) {
                 for (InfluxQLQueryResult.Series.Record record : series.getValues()) {
