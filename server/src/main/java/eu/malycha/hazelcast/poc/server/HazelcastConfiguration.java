@@ -40,14 +40,19 @@ public class HazelcastConfiguration {
         splitBrainProtectionConfig.setEnabled(true);
         config.addSplitBrainProtectionConfig(splitBrainProtectionConfig);
 
+        MapStoreConfig tradeMapStoreConfig = new MapStoreConfig();
+        tradeMapStoreConfig.setWriteDelaySeconds(1); // Configures Write-Behind
+        tradeMapStoreConfig.setClassName("eu.malycha.hazelcast.poc.server.TradeMapStore");
+
         MapConfig tradeMapConfig = config.getMapConfig("trade");
         tradeMapConfig.addIndexConfig(new IndexConfig(IndexType.HASH, "sender"));
         tradeMapConfig.addIndexConfig(new IndexConfig(IndexType.HASH, "counterpart"));
         tradeMapConfig.setSplitBrainProtectionName(SPB_NAME);
+        tradeMapConfig.setMapStoreConfig(tradeMapStoreConfig);
 
         MapStoreConfig tradePojoMapStoreConfig = new MapStoreConfig();
         tradePojoMapStoreConfig.setWriteDelaySeconds(1); // Configures Write-Behind
-        tradePojoMapStoreConfig.setClassName("eu.malycha.hazelcast.poc.server.InfluxDBMapStore");
+        tradePojoMapStoreConfig.setClassName("eu.malycha.hazelcast.poc.server.TradePojoMapStore");
 
         MapConfig tradePojoMapConfig = config.getMapConfig("trade_pojo");
         tradePojoMapConfig.addIndexConfig(new IndexConfig(IndexType.HASH, "sender"));
