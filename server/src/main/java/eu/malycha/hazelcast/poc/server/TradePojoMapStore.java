@@ -61,7 +61,6 @@ public class TradePojoMapStore implements MapStore<String, TradePojo>, MapLoader
 
     @Override
     public void delete(String key) {
-        // TODO: Prepared statement
         DeleteApi deleteApi = influxDB.getDeleteApi();
 
         OffsetDateTime start = OffsetDateTime.now().minus(1, ChronoUnit.YEARS);
@@ -75,7 +74,6 @@ public class TradePojoMapStore implements MapStore<String, TradePojo>, MapLoader
         keys.forEach(this::delete);
     }
 
-    // TODO: Prepared statement
     @Override
     public TradePojo load(String key) {
         String flux = "from(bucket: \"db0\") |> range(start:0) |> filter(fn: (r) => r.tradeId == \"%s\")".formatted(key);
