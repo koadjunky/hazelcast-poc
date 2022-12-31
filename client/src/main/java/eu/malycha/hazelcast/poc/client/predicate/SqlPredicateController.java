@@ -1,5 +1,6 @@
 package eu.malycha.hazelcast.poc.client.predicate;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Map;
 
@@ -31,17 +32,33 @@ public class SqlPredicateController {
 
     @GetMapping("/pojo/sender/{name}")
     public void pojoSenderCount(String name) {
+        long start = System.currentTimeMillis();
         Predicate<String, TradePojo> predicate = Predicates.sql("sender = '%s'".formatted(name));
         IMap<String, TradePojo> map = hz.getMap("trade_pojo");
         Collection<TradePojo> trades = map.values(predicate);
+        Integer sum = trades.stream()
+            .map(TradePojo::getQuantity)
+            .map(Integer::parseInt)
+            .reduce(0, Integer::sum);
         LOGGER.info("Returned {} rows", trades.size());
+        LOGGER.info("Total: {}", sum);
+        long stop = System.currentTimeMillis();
+        LOGGER.info("Calculation executed in {} ms", stop - start);
     }
 
     @GetMapping("/protobuf/sender/{name}")
     public void protobufSenderCount(String name) {
+        long start = System.currentTimeMillis();
         Predicate<String, Trade> predicate = Predicates.sql("sender = '%s'".formatted(name));
         IMap<String, Trade> map = hz.getMap("trade");
         Collection<Trade> trades = map.values(predicate);
+        Integer sum = trades.stream()
+            .map(Trade::getQuantity)
+            .map(Integer::parseInt)
+            .reduce(0, Integer::sum);
         LOGGER.info("Returned {} rows", trades.size());
+        LOGGER.info("Total: {}", sum);
+        long stop = System.currentTimeMillis();
+        LOGGER.info("Calculation executed in {} ms", stop - start);
     }
 }

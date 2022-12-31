@@ -61,3 +61,15 @@ calculates sum of one field.
 | predicate with index     | 170ms         | 333ms      |
 | predicate without index  | 553ms (x3.25) | 561ms (x2) |
 | no predicate (full scan) | 1100ms (x6.5) | 867ms (x3) |
+
+## Task executor vs SQL query
+
+Map loaded with 100k records (both protobuf and pojo at the same time). Query selects 1/4
+of records and calculates sum of one field. Selection field is covered by index. Hazelcast
+has three instances, no local cache.
+
+| Operation     | protobuf | pojo    |
+|---------------|----------|---------|
+| executor      | 204ms    | 227ms   |
+| sql predicate | 63ms     | 255ms   |
+| sql           | -        | 303ms   |

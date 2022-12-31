@@ -40,7 +40,6 @@ public class LoaderService {
                 .setPrice("1.0")
                 .build();
             data.put(record.getTradeId(), record);
-            delay(1);
         }
         long stop = System.currentTimeMillis();
         LOGGER.info("Loaded {} records in {} ms", number, stop - start);

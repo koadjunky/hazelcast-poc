@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 // TODO: Pipelines
-// TODO: Compare SQL and executor service performance
 
 @RestController
 @RequestMapping("/api/execute/sum/quantity")

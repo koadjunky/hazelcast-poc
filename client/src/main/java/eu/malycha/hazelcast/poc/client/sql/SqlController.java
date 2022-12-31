@@ -23,24 +23,38 @@ public class SqlController {
 
     @GetMapping("/pojo/sender/{name}")
     public int pojoSenderCount(String name) {
+        long start = System.currentTimeMillis();
         try (SqlResult result = hz.getSql().execute("SELECT * FROM trade_pojo WHERE sender = '%s'".formatted(name))) {
             int count = 0;
+            int sum = 0;
             for (SqlRow row : result) {
                 count++;
+                String quantity = row.getObject("quantity");
+                sum += Integer.parseInt(quantity);
             }
             LOGGER.info("Returned {} rows", count);
+            LOGGER.info("Total: {}", sum);
+            long stop = System.currentTimeMillis();
+            LOGGER.info("Calculation executed in {} ms", stop - start);
             return count;
         }
     }
 
     @GetMapping("/protobuf/sender/{name}")
     public int protobufSenderCount(String name) {
+        long start = System.currentTimeMillis();
         try (SqlResult result = hz.getSql().execute("SELECT * FROM trade WHERE sender = '%s'".formatted(name))) {
             int count = 0;
+            int sum = 0;
             for (SqlRow row : result) {
                 count++;
+                String quantity = row.getObject("quantity");
+                sum += Integer.parseInt(quantity);
             }
             LOGGER.info("Returned {} rows", count);
+            LOGGER.info("Total: {}", sum);
+            long stop = System.currentTimeMillis();
+            LOGGER.info("Calculation executed in {} ms", stop - start);
             return count;
         }
     }

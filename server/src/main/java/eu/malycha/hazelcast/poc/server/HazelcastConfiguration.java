@@ -48,7 +48,7 @@ public class HazelcastConfiguration {
         tradeMapConfig.addIndexConfig(new IndexConfig(IndexType.HASH, "sender"));
         tradeMapConfig.addIndexConfig(new IndexConfig(IndexType.HASH, "counterpart"));
         tradeMapConfig.setSplitBrainProtectionName(SPB_NAME);
-        tradeMapConfig.setMapStoreConfig(tradeMapStoreConfig);
+        // tradeMapConfig.setMapStoreConfig(tradeMapStoreConfig);
 
         MapStoreConfig tradePojoMapStoreConfig = new MapStoreConfig();
         tradePojoMapStoreConfig.setWriteDelaySeconds(1); // Configures Write-Behind
@@ -58,7 +58,7 @@ public class HazelcastConfiguration {
         tradePojoMapConfig.addIndexConfig(new IndexConfig(IndexType.HASH, "sender"));
         tradePojoMapConfig.addIndexConfig(new IndexConfig(IndexType.HASH, "counterpart"));
         tradePojoMapConfig.setSplitBrainProtectionName(SPB_NAME);
-        tradePojoMapConfig.setMapStoreConfig(tradePojoMapStoreConfig);
+        // tradePojoMapConfig.setMapStoreConfig(tradePojoMapStoreConfig);
 
         SerializerConfig serializerConfig = new SerializerConfig();
         serializerConfig.setTypeClass(Trade.class);
