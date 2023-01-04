@@ -14,6 +14,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.splitbrainprotection.SplitBrainProtectionOn;
 import eu.malycha.hazelcast.poc.domain.Trade;
+import eu.malycha.hazelcast.poc.domain.TradePojo;
 import eu.malycha.hazelcast.poc.domain.TradeSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,6 +65,9 @@ public class HazelcastConfiguration {
         serializerConfig.setTypeClass(Trade.class);
         serializerConfig.setImplementation(new TradeSerializer());
         config.getSerializationConfig().addSerializerConfig(serializerConfig);
+
+        config.getSerializationConfig().getCompactSerializationConfig()
+            .addClass(TradePojo.class);
 
         config.getDurableExecutorConfig("default")
             .setPoolSize(4)

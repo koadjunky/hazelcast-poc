@@ -1,0 +1,13 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.5'
+    id 'com.google.protobuf' version '0.9.1'
+}
+
+group 'eu.malycha'
+version '0.0.1-SNAPSHOT'
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.21.9"
+    }
+}

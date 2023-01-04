@@ -1,4 +1,4 @@
-package eu.malycha.hazelcast.poc.client;
+package eu.malycha.hazelcast.poc.client2;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
@@ -11,11 +11,11 @@ import com.hazelcast.config.MaxSizePolicy;
 import com.hazelcast.config.NearCacheConfig;
 import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.core.HazelcastInstance;
+import eu.malycha.hazelcast.poc.domain.Trade;
 import eu.malycha.hazelcast.poc.domain.TradePojo;
+import eu.malycha.hazelcast.poc.domain.TradeSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import eu.malycha.hazelcast.poc.domain.Trade;
-import eu.malycha.hazelcast.poc.domain.TradeSerializer;
 
 @Configuration
 public class HazelcastConfiguration {
@@ -64,8 +64,6 @@ public class HazelcastConfiguration {
     @Bean
     public HazelcastInstance hazelcast() {
         HazelcastInstance hz = HazelcastClient.newHazelcastClient(clientConfig());
-        HazelcastUtils.configureMapping(hz, "trade_pojo", TradePojo.class);
-        HazelcastUtils.configureMapping(hz, "trade", Trade.class);
         return hz;
     }
 }
