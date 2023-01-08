@@ -42,6 +42,18 @@ Obtain token from running container:
 
 ```docker exec hazelcast-poc-influxdb-1 influx auth list | awk '/admin/ {print $4 " "}'```
 
+## Grafana
+
+Grafana web interface is available at:
+
+```http://localhost:3000/``` (admin/admin)
+
+## Prometheus
+
+Prometheus web interface is available at:
+
+```http://localhost:9090```
+
 # Performance notes
 
 ## Transactions
