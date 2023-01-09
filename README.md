@@ -1,5 +1,38 @@
 # hazelcast-poc
 
+Hazelcast proof-of-concept. Covers features:
+ - management center
+ - storing pojo and protobuf records
+ - records versioning, compact serializer
+ - local cache
+ - sql queries
+ - predicates and sql predicates
+ - executors
+ - indexes
+ - Influxdb database backend
+ - transactions
+ - split-brain detection
+
+## Building
+
+To build project execute:
+
+```./gradlew clean build docker```
+
+To run project execute:
+
+```docker compose up```
+
+and then in separate windows:
+
+```./gradlew :hazelcast-poc-client:bootRun```
+
+and
+
+```./gradlew :hazelcast-poc-client2:bootRun```
+
+Swagger consoles of clients are available on ports 9000 and 9001.
+
 ## Docker Compose
 
 Start docker compose:
