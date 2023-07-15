@@ -2,6 +2,7 @@ package eu.malycha.hazelcast.poc.client.updating;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
+import eu.malycha.hazelcast.poc.client.loading.LoaderService;
 import eu.malycha.hazelcast.poc.domain.Trade;
 import eu.malycha.hazelcast.poc.domain.TradePojo;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/update")
@@ -55,6 +57,20 @@ public class UpdateController {
         }
         long stop = System.currentTimeMillis();
         LOGGER.info("Updated {} records in {} ms", number, stop - start);
+    }
+
+    @GetMapping("/protobuf/{number}/{ttl}/{delay}")
+    public void protobufUpdateTtl(int number, int ttl, int delay) {
+        IMap<String, Trade> data  = hz.getMap("trade_ttl");
+        for (int i = 0; i < number; i++) {
+            String key = "%010d".formatted(i);
+            Trade trade = data.get(key);
+            Trade updated = trade.toBuilder()
+                .build();
+            data.putAsync(key, updated, ttl, TimeUnit.MILLISECONDS);
+            LOGGER.info("Writing record {} with ttl={}ms", i, ttl);
+            LoaderService.delay(delay);
+        }
     }
 
     public TradePojo clone(TradePojo source) {

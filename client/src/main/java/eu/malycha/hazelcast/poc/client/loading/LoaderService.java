@@ -3,6 +3,7 @@ package eu.malycha.hazelcast.poc.client.loading;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
@@ -60,6 +61,22 @@ public class LoaderService {
         }
         long stop = System.currentTimeMillis();
         LOGGER.info("Loaded {} records in {} ms", number, stop - start);
+    }
+
+    void load_protobuf_ttl(int number, int ttl, int delay) {
+        IMap<String, Trade> data = hz.getMap("trade_ttl");
+        for (int i = 0; i < number; i++) {
+            Trade record = Trade.newBuilder()
+                .setTradeId("%010d".formatted(i))
+                .setSender(getRandomAccount())
+                .setCounterpart(getRandomAccount())
+                .setQuantity(getRandomQuantity())
+                .setPrice("1.0")
+                .build();
+            data.putAsync(record.getTradeId(), record, ttl, TimeUnit.MILLISECONDS);
+            LOGGER.info("Writing record {} with ttl={}ms", i, ttl);
+            delay(delay);
+        }
     }
 
     public static String getRandomAccount() {

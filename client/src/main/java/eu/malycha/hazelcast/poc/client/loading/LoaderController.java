@@ -31,4 +31,10 @@ public class LoaderController {
     public void load_protobuf(int number) {
         service.load_protobuf(number);
     }
+
+    @PostMapping("/protobuf/{number}/{ttl}/{delay}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void load_protobuf_ttl(int number, int ttl, int delay) {
+        service.load_protobuf_ttl(number, ttl, delay);
+    }
 }
